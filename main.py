@@ -32,7 +32,7 @@ def denst(Pos,Nx,boxsize,n0):                      #  функция, вычис
     n *= n0 * boxsize / N / dx
     return n
 
-def denst2D(Pos,Nx,boxsize,n0,xx,yy):                      #  функция, вычисляющая плотность по массиву частиц
+def denst2D(Pos,Nx,boxsize,n0,xx,yy,w):                      #  функция, вычисляющая плотность по массиву частиц
     if(torch.max(Pos[:,0]) > boxsize[0] or torch.max(Pos[:,1]) > boxsize[1]):
         Pos = torch.remainder(Pos,boxsize)
 
@@ -56,6 +56,7 @@ def denst2D(Pos,Nx,boxsize,n0,xx,yy):                      #  функция, в
 
 
    # n *= n0 * boxsize[0]*boxsize[1] / N / dx[0]/dx[1]
+    n *= w
     return n
 
 xx = np.linspace(0, boxsize[0], Nx[0].int())
@@ -74,7 +75,7 @@ n0 = np.exp(0.5*X)
 
 from PIC_aux import get_particles
 # n0 =
-parts = get_particles(torch.ones_like(torch.from_numpy(n0)),1,xx,yy)
+parts = get_particles(torch.from_numpy(n0),1,xx,yy)
 n = denst2D(parts,Nx,torch.from_numpy(boxsize),1.0,xx,yy)
 
 
@@ -92,7 +93,7 @@ i = 0
 
 while lf.item() > 1e-2:
     optimizer.zero_grad()
-    n = denst2D(pos,Nx,torch.from_numpy(boxsize),1.0)
+    n = denst2D(pos,Nx,torch.from_numpy(boxsize),1.0,xx,yy)
     #n0 = torch.ones_like(n)
     #plt.plot(xx.numpy(),n.detach().numpy(),color='red',label='iteration '+ str(i))
     # n0 = torch.exp(xx) # torch.ones_like(n)
