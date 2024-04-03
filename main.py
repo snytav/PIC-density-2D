@@ -10,7 +10,7 @@ from surface import plot_3Dsurface
 import torch                                   # библиотека для работы с нейронныит сетями. Здесь нужна для вычислений с производными
 import numpy as np                             # математическая библиотека Python
 boxsize = 1.0*np.ones(2)                       # размер расчетной области
-Nx = 10*torch.ones(2)                          # количество узлов
+Nx = 11*torch.ones(2)                          # количество узлов
 N = 1000                                        # количество частиц
 
 pos = np.multiply(np.random.rand(N,2),boxsize) #  массив координат частиц
@@ -32,11 +32,13 @@ def denst(Pos,Nx,boxsize,n0):                      #  функция, вычис
     n *= n0 * boxsize / N / dx
     return n
 
-def denst2D(Pos,Nx,boxsize,n0):                      #  функция, вычисляющая плотность по массиву частиц
+def denst2D(Pos,Nx,boxsize,n0,xx,yy):                      #  функция, вычисляющая плотность по массиву частиц
     if(torch.max(Pos[:,0]) > boxsize[0] or torch.max(Pos[:,1]) > boxsize[1]):
         Pos = torch.remainder(Pos,boxsize)
 
-    dx = torch.divide(boxsize,Nx)
+    dx = xx[1] - xx[0]
+    dy = yy[1] - yy[0]
+    dx = torch.tensor([dx,dy])
     n = torch.zeros(Nx.int().tolist())
     for pos in Pos:
         j = torch.floor(torch.divide(pos, dx)).long()
@@ -53,25 +55,27 @@ def denst2D(Pos,Nx,boxsize,n0):                      #  функция, вычи
         n[jp1[0]][jp1[1]] += weight_jp1[0] * weight_jp1[1]  # i+1,j+1   dx*dy
 
 
-    n *= n0 * boxsize[0]*boxsize[1] / N / dx[0]/dx[1]
+   # n *= n0 * boxsize[0]*boxsize[1] / N / dx[0]/dx[1]
     return n
 
-n = denst2D(pos,Nx,torch.from_numpy(boxsize),1.0)                     # пробный запуск
-print(n)
+xx = np.linspace(0, boxsize[0], Nx[0].int())
+yy = np.linspace(0, boxsize[1], Nx[1].int())
+
+# n = denst2D(pos,Nx,torch.from_numpy(boxsize),1.0,xx,yy)                     # пробный запуск
+# print(n)
 
 # xx = torch.linspace(0,boxsize,Nx)
 
 import sys
 
-xx = np.linspace(0, boxsize[0], Nx[0].int())
-yy = np.linspace(0, boxsize[1], Nx[1].int())
+
 X,Y = np.meshgrid(xx,yy)
 n0 = np.exp(0.5*X)
 
 from PIC_aux import get_particles
 # n0 =
 parts = get_particles(torch.ones_like(torch.from_numpy(n0)),1,xx,yy)
-n = denst2D(parts,Nx,torch.from_numpy(boxsize),1.0)
+n = denst2D(parts,Nx,torch.from_numpy(boxsize),1.0,xx,yy)
 
 
 plot_3Dsurface(xx,yy,n0,'X','Y','sample function')
