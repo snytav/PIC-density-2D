@@ -14,11 +14,15 @@ def get_particles(n0,N_min,xx,yy):
     w = n0_max/n0_min/N_min       # single particle weight: maximum to minimum ratio is represented by 10 particles
 
     particles = []
+    Npx = 50
 
-    xm = (xx[:-1] + xx[1:]) * 0.5
-    ym = (yy[:-1] + yy[1:]) * 0.5
-    for i,x in enumerate(xm):
-        for j,y in enumerate(ym):
+    # xm = (xx[:-1] + xx[1:]) * 0.5
+    # ym = (yy[:-1] + yy[1:]) * 0.5
+    xm = np.linspace(xx[:-1],xx[1:],Npx)
+    ym = np.linspace(yy[:-1],yy[1:],Npx)
+
+    for i,x in enumerate(xx):
+        for j,y in enumerate(yy):
               N_ij = int(np.ceil(n0[i][j].numpy()/w).numpy())
               for k in range(N_ij):
                   particles.append([x,y])
