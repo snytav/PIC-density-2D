@@ -62,8 +62,8 @@ def denst2D(Pos,Nx,boxsize,n0,xx,yy,w):                      #  функция, 
 xx = np.linspace(0, boxsize[0], Nx[0].int())
 yy = np.linspace(0, boxsize[1], Nx[1].int())
 
-# n = denst2D(pos,Nx,torch.from_numpy(boxsize),1.0,xx,yy)                     # пробный запуск
-# print(n)
+n = denst2D(pos,Nx,torch.from_numpy(boxsize),1.0,xx,yy,1.0)                     # пробный запуск
+print(n)
 
 # xx = torch.linspace(0,boxsize,Nx)
 
