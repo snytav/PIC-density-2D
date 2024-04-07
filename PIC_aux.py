@@ -11,7 +11,7 @@ def get_particles(n0,N_min,xx,yy):
     n0_max = torch.max(n0)
     n0_total = torch.sum(n0)
     #N = (n0_total/n0_min)*N_min
-    w = n0_max/n0_min/10       # single particle weight: maximum to minimum ratio is represented by 10 particles
+    w = n0_max/n0_min/N_min       # single particle weight: maximum to minimum ratio is represented by 10 particles
 
     particles = []
 

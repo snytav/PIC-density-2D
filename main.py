@@ -75,8 +75,8 @@ n0 = np.exp(0.5*X)
 
 from PIC_aux import get_particles
 # n0 =
-parts = get_particles(torch.from_numpy(n0),1,xx,yy)
-n = denst2D(parts,Nx,torch.from_numpy(boxsize),1.0,xx,yy)
+parts = get_particles(torch.ones_like(torch.from_numpy(n0)),1,xx,yy)
+n = denst2D(parts,Nx,torch.from_numpy(boxsize),1.0,xx,yy,1.0)
 
 
 plot_3Dsurface(xx,yy,n0,'X','Y','sample function')
