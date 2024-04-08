@@ -78,6 +78,8 @@ parts = get_particles(torch.ones_like(torch.from_numpy(n0)),1,xx,yy)
 n = denst2D(parts,Nx,torch.from_numpy(boxsize),1.0,xx,yy)
 
 
+plot_3Dsurface(xx,yy,n.detach().numpy(),'X','Y','PIC')
+
 plot_3Dsurface(xx,yy,n0,'X','Y','sample function')
 
 import matplotlib.pyplot as plt

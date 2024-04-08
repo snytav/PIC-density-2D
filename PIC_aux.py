@@ -18,12 +18,13 @@ def get_particles(n0,N_min,xx,yy):
     #xm = np.linspace(xx[0],xx[-1],Npx)
     xm = np.loadtxt('uniform.txt')
     ym = np.linspace(yy[0],yy[-1],Npx)
-    ym = (yy[:-1] + yy[1:]) * 0.5
+   # ym = (yy[:-1] + yy[1:]) * 0.5
     for i,x in enumerate(xx):
         for j,y in enumerate(yy):
-              N_ij = int(np.ceil(n0[i][j].numpy()/n0_min *N_min).numpy())
-              for k in range(N_ij):
+              # N_ij = int(np.ceil(n0[i][j].numpy()/n0_min *N_min).numpy())
+              # for k in range(N_ij):
                   particles.append([x,y])
+        qq = 0
 
     particles = torch.tensor(particles)
     return particles
