@@ -88,13 +88,14 @@ import matplotlib.pyplot as plt
 # n0 = torch.exp(xx) # профиль плоности, который нужно воспроизвести с помощью частиц. Обязательно в виде массива библиотеки PyTorch
 # plt.plot(xx.numpy(),n0.detach().numpy(),color='green')
 n0 = torch.from_numpy(n0)
-optimizer = torch.optim.Adam([pos],lr=0.01)
+parts.requires_grad = True
+optimizer = torch.optim.Adam([parts],lr=1e-4)
 lf = 1e6*torch.ones(1)
 i = 0
 
 while lf.item() > 1e-2:
     optimizer.zero_grad()
-    n = denst2D(pos,Nx,torch.from_numpy(boxsize),1.0)
+    n = denst2D(parts,Nx,torch.from_numpy(boxsize),xx,yy,n0.min()/10)
     #n0 = torch.ones_like(n)
     #plt.plot(xx.numpy(),n.detach().numpy(),color='red',label='iteration '+ str(i))
     # n0 = torch.exp(xx) # torch.ones_like(n)
