@@ -15,7 +15,8 @@ def get_particles(n0,N_min,xx,yy):
 
     #xm = (xx[:-1]+xx[1:])*0.
     Npx = 50
-    xm = np.linspace(xx[0],xx[-1],Npx)
+    #xm = np.linspace(xx[0],xx[-1],Npx)
+    xm = np.loadtxt('uniform.txt')
     ym = np.linspace(yy[0],yy[-1],Npx)
     ym = (yy[:-1] + yy[1:]) * 0.5
     for i,x in enumerate(xx):
