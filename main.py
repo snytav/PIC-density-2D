@@ -32,7 +32,7 @@ def denst(Pos,Nx,boxsize,n0):                      #  функция, вычис
     n *= n0 * boxsize / N / dx
     return n
 
-def denst2D(Pos,Nx,boxsize,n0,xx,yy):                      #  функция, вычисляющая плотность по массиву частиц
+def denst2D(Pos,Nx,boxsize,xx,yy,w):                      #  функция, вычисляющая плотность по массиву частиц
     if(torch.max(Pos[:,0]) > boxsize[0] or torch.max(Pos[:,1]) > boxsize[1]):
         Pos = torch.remainder(Pos,boxsize)
 
@@ -49,10 +49,10 @@ def denst2D(Pos,Nx,boxsize,n0,xx,yy):                      #  функция, в
         weight_jp1 = torch.divide((pos - torch.multiply(j,dx)) , dx)
         jp1 = torch.remainder(jp1, Nx)
         jp1 = jp1.long()
-        n[j[0]][j[1]]     += weight_j[0] * weight_j[1]      # i,j       (1-dx)*(1-dy)
-        n[j[0]][jp1[1]]   += weight_j[0] * weight_jp1[1]    # i,j+1     (1-dx)*dy
-        n[jp1[0]][j[1]]   += weight_jp1[0] * weight_j[1]    # i+1,j     dx*(1-dy)
-        n[jp1[0]][jp1[1]] += weight_jp1[0] * weight_jp1[1]  # i+1,j+1   dx*dy
+        n[j[0]][j[1]]     += w*weight_j[0] * weight_j[1]      # i,j       (1-dx)*(1-dy)
+        n[j[0]][jp1[1]]   += w*weight_j[0] * weight_jp1[1]    # i,j+1     (1-dx)*dy
+        n[jp1[0]][j[1]]   += w*weight_jp1[0] * weight_j[1]    # i+1,j     dx*(1-dy)
+        n[jp1[0]][jp1[1]] += w*weight_jp1[0] * weight_jp1[1]  # i+1,j+1   dx*dy
 
 
    # n *= n0 * boxsize[0]*boxsize[1] / N / dx[0]/dx[1]
@@ -75,7 +75,7 @@ n0 = np.exp(0.5*X)
 from PIC_aux import get_particles
 # n0 =
 parts = get_particles(torch.from_numpy(n0),10,xx,yy)
-n = denst2D(parts,Nx,torch.from_numpy(boxsize),n0.min()/10,xx,yy)
+n = denst2D(parts,Nx,torch.from_numpy(boxsize),xx,yy,n0.min()/10)
 
 
 plot_3Dsurface(xx,yy,n.detach().numpy(),'X','Y','PIC')
