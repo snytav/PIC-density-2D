@@ -23,6 +23,8 @@ def get_particles(n0,N_min,xx,yy):
         for j,y in enumerate(yy):
               # N_ij = int(np.ceil(n0[i][j].numpy()/n0_min *N_min).numpy())
               # for k in range(N_ij):
+              particles.append([x, y])
+              if i == 0 and j == 0:
                   particles.append([x,y])
         qq = 0
 
