@@ -8,8 +8,7 @@ import numpy as np
 # yy - tensor, set of points along Y
 def get_particles(n0,N_min,xx,yy):
     n0_min = torch.min(n0)
-    n0_total = torch.sum(n0)
-    N = (n0_total/n0_min)*N_min
+    w = n0_min/N_min
 
     particles = []
 
@@ -21,11 +20,9 @@ def get_particles(n0,N_min,xx,yy):
    # ym = (yy[:-1] + yy[1:]) * 0.5
     for i,x in enumerate(xx):
         for j,y in enumerate(yy):
-              # N_ij = int(np.ceil(n0[i][j].numpy()/n0_min *N_min).numpy())
-              # for k in range(N_ij):
-              particles.append([x, y])
-              if i == 0 and j == 0:
-                  particles.append([x,y])
+              N_ij = int(np.ceil(n0[i][j].numpy()/w))
+              for k in range(N_ij):
+                  particles.append([x, y])
         qq = 0
 
     particles = torch.tensor(particles)
